@@ -13,7 +13,11 @@ This challenge teaches the concepts of:
 
 ## Setup
 
-This program uses the Python Tkinter module.
+This program uses the Python Tkinter module and pyperclip.
+
+```
+pip install pyperclip
+```
 
 ## How to run
 
