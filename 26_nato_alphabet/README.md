@@ -7,6 +7,7 @@ This is a simple program that translate a word into NATO alphabet letters.
 This challenge teaches the concepts of:
  - List comprehension
  - Dictionary comprehension
+ - Error handling
 
 ## Setup
 
