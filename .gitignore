@@ -71,3 +71,8 @@ venv.bak/
 
 #current day in course
 current-day-start/
+
+#lesson 31
+words_to_learn.csv
+
+
