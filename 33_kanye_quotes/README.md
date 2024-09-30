@@ -1,6 +1,6 @@
-# Birthday wisher
+# Kanye quotes
 
-This is a simple program that check a csv list of birthdays and emails and send a random "happy birthday" e-mail.
+This is a simple program that fetches quotes from a public API.
 
 
 This challenge teaches the concepts of:
