@@ -11,6 +11,9 @@ NEWSAPI_API_KEY = ""  # your newsapi api key here
 NEWSAPI_API_URL = "https://newsapi.org/v2/everything"
 TWILIO_ACC_ID = ""  # your twilio account id here
 TWILIO_AUTH_TOKEN = ""  # your twilio auth token here
+WHATS_SENDER = ""
+WHATS_RECEIVER = ""
+
 
 
 alphavantage_paramters = {
@@ -78,7 +81,7 @@ if diff:
     for new in news:
         message_body = f"{STOCK}: {diff}\nHeadline: {new["title"]}\nBrief: {new["description"]}"
         message = client.messages.create(
-            from_="whatsapp:REDACTED",
+            from_=f"whatsapp:{WHATS_SENDER}",
             body=message_body,
-            to="whatsapp:REDACTED"
+            to=f"whatsapp:{WHATS_RECEIVER}"
         )
