@@ -25,6 +25,15 @@ class FlightSearch:
         return oauth
     
     def find_city_iata(self, city: str):
+        """
+        Call the Amadeus API and returns an IATA code of the city given part of the city name.
+
+        Args:
+            city (str): Complete or partial string of the city name to seach for.
+
+        Returns:
+            str: IANA city code or None.
+        """
         params = {
             "keyword": city,
         }
@@ -35,14 +44,28 @@ class FlightSearch:
         else:
             return None
         
-    def find_flight_offer(self, iana_departure: str, iana_destination: str, departure_date: str, max_price: int):
+    def find_flight_offer(self, iana_departure: str, iana_destination: str, departure_date: str, currency: str, max_price: int) -> (dict | None):
+        """
+        Call the Amadeus API an find offers given the departure, destination, currency and looking for offers lower
+        than max_price.
+
+        Args:
+            iana_departure (str): iana code of the city to search for departure flights.
+            iana_destination (str): iana code of the city to search for destination flights.
+            departure_date (str): date of departure in YYY-mm-dd format.
+            currency (str): currency code ex.: BRL, USD or EUR.
+            max_price (int): seach will look for offers lower than this price.
+
+        Returns:
+            dict: dictionary of the offers on depature date or None.
+        """
         result = None
         params = {
             "originLocationCode": iana_departure,
             "destinationLocationCode": iana_destination,
             "departureDate": departure_date,
             "adults": 1,
-            "currencyCode": "BRL",
+            "currencyCode": currency,
             "maxPrice": max_price,
         }
         r = self.session.get(url=f"{self.amadeus_api_url}/v2/shopping/flight-offers", params=params)
@@ -51,22 +74,36 @@ class FlightSearch:
         
         return result
     
-    def find_lowest_flight(self, iana_departure: str, iana_destination: str, max_price: int):
+    def find_lowest_flight(self, iana_departure: str, iana_destination: str, currency: str, max_price: int, days_to_search: int) -> (dict | None):
+        """
+        From a series of calls on find_flight_offer on Amadeus API find the lowest one given a start price and number of
+        days to search from.
+
+        Args:
+            iana_departure (str): iana code of the city to search for departure flights.
+            iana_destination (str): iana code of the city to search for destination flights.
+            currency (str): currency code ex.: BRL, USD or EUR.
+            max_price (int): value to start search from, offers should be lower than this value.
+            days_to_search (int): number of days to keep searching for offers ex.: 30 days starting from tomorrow.
+
+        Returns:
+            dict: returns the dict of the best offer or None.
+        """
         lowest_price = max_price
         best_offer = None
         current_date = dt.datetime.today() + dt.timedelta(days=1)
-        end_date = current_date + dt.timedelta(days=(30*6))
+        end_date = current_date + dt.timedelta(days=days_to_search)
         delta = dt.timedelta(days=1)
         while current_date <= end_date:
-            result = self.find_flight_offer(iana_departure, iana_destination, current_date.strftime("%Y-%m-%d"), lowest_price)
+            result = self.find_flight_offer(iana_departure, iana_destination, current_date.strftime("%Y-%m-%d"), currency, lowest_price)
             if result["meta"]["count"] > 0:
                 for entry in result["data"]:
                     if int(float(entry["price"]["grandTotal"])) < lowest_price:
                         lowest_price = int(float(entry["price"]["grandTotal"]))
                         best_offer = entry
-                        print(f"New lowest price: {lowest_price}"   )
+                        print(f"New lowest price: {lowest_price} {currency}")
             
-            print(f"{iana_destination} - {current_date.strftime("%Y-%m-%d")}")
+            print(f"Searching offers for: {iana_destination} on {current_date.strftime("%Y-%m-%d")}")
             current_date += delta
 
         return best_offer

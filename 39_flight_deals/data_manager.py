@@ -12,7 +12,13 @@ class DataManager:
         self.sheety_sheet = os.getenv("SHEETY_SHEET")
         self.sheet_auth = (os.getenv("SHEETY_AUTH_USER"), os.getenv("SHEETY_AUTH_PASS"))
 
-    def get_destinations(self):
+    def get_destinations(self) -> dict:
+        """
+        Call Sheety API and return the lines of the spreadshet containing the country, iana code and max price.
+
+        Returns:
+            dict: A json cotaining each row of the sheet.
+        """
         r = requests.get(
                 url=f"{self.api_url}/{self.sheety_user}/{self.sheety_project}/{self.sheety_sheet}",
                 auth=self.sheet_auth
@@ -20,7 +26,14 @@ class DataManager:
         r.raise_for_status()
         return r.json()["prices"]
 
-    def update_cities_iata(self, destination_id: int, iata_code: str):
+    def update_cities_iata(self, destination_id: int, iata_code: str) -> None:
+        """
+        Call Sheety API and updates the city iata code on the mentioned destination_id.
+
+        Args:
+            destination_id (int): the id of the row to update.
+            iata_code (str): the value of the IATA city code to update in the cell.
+        """
         params = {
             "price": {
                 "iataCode": iata_code,
