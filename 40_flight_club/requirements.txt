@@ -1,0 +1,5 @@
+oauthlib==3.2.2
+requests==2.32.3
+requests-oauthlib==2.0.0
+twilio==9.3.3
+python-dotenv==1.0.1
