@@ -2,7 +2,7 @@ import requests
 
 class Post:
     def __init__(self) -> None:
-        api = "https://api.npoint.io/c790b4d5cab58020d391"
+        api = "https://api.npoint.io/19178aee7e641ba9e7fc"
         self.r = requests.get(api)
         self.r.raise_for_status()
 

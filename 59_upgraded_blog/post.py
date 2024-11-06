@@ -4,7 +4,7 @@ from datetime import datetime
 class Post():
     """docstring for Post."""
     def __init__(self):
-        posts_url = "https://api.npoint.io/ae161abade368170392a"
+        posts_url = "https://api.npoint.io/19178aee7e641ba9e7fc"
         r = requests.get(posts_url)
         r.raise_for_status()
         self.blog_posts = []
