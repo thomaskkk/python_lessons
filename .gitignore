@@ -75,4 +75,5 @@ current-day-start/
 #lesson 31
 words_to_learn.csv
 
-
+#sqlite database
+*.db
